@@ -7,3 +7,8 @@ An ElvUI modification that prevents a crash on Project Epoch.
 2. Unzip the Download
 3. Open the ElvUI-Epoch-main folder
 4. Drag the ElvUI and ElvUI_OptionsUI folders to your Addons folder. 
+
+##Alternative
+1. Download it from here: https://github.com/Bennylavaa/ElvUI-Epoch/releases/latest/download/ElvUI-Epoch.zip
+2. Unzip the download
+3. Drag the ElvUI and ElvUI_OptionsUI folders to your Addons folder. 
