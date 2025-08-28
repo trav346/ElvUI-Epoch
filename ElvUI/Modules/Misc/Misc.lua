@@ -146,7 +146,8 @@ do
 		if not CanMerchantRepair() or IsShiftKeyDown() then return end
 
 		local repairAllCost, canRepair = GetRepairAllCost()
-		if not canRepair or repairAllCost <= 0 then return end
+		--if not canRepair or repairAllCost <= 0 then return end
+		if not canRepair then return end
 
 		if repairMode == "GUILD" then
 			if not CanGuildBankRepair() then
@@ -171,7 +172,8 @@ do
 		if repairMode == "GUILD" then
 			RepairAllItems(true)
 
-			E:Print(format("%s%s", L["Your items have been repaired using guild bank funds for: "], E:FormatMoney(repairAllCost, "SMART", true)))
+			--E:Print(format("%s%s", L["Your items have been repaired using guild bank funds for: "], E:FormatMoney(repairAllCost, "SMART", true)))
+			E:Print(L["Your items have been repaired using guild bank funds"])
 		else
 			local playerMoney = GetMoney()
 
@@ -188,7 +190,8 @@ do
 				local spent = RepairInventoryByPriority(playerMoney)
 
 				if spent > 0 then
-					E:Print(format("%s%s", L["Your items have been repaired for: "], E:FormatMoney(spent, "SMART", true)))
+					--E:Print(format("%s%s", L["Your items have been repaired for: "], E:FormatMoney(spent, "SMART", true)))
+					E:Print(L["Your items have been repaired"])
 					E:Print(L["You don't have enough money to repair all items."])
 				else
 					E:Print(L["You don't have enough money to repair."])
