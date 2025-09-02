@@ -7,6 +7,7 @@ local max, min = math.max, math.min
 local format = string.format
 --WoW API
 local GetNumQuestLogEntries = GetNumQuestLogEntries
+local GetSpellInfo = GetSpellInfo
 local GetQuestLogRewardXP = GetQuestLogRewardXP
 local GetQuestLogSelection = GetQuestLogSelection
 local GetQuestLogTitle = GetQuestLogTitle
@@ -17,14 +18,31 @@ local SelectQuestLogEntry = SelectQuestLogEntry
 local UnitLevel = UnitLevel
 local UnitXP = UnitXP
 local UnitXPMax = UnitXPMax
+local UnitBuff = UnitBuff
 
 -- GLOBALS: CreateFrame, GameTooltip, LeftChatPanel, ToggleDropDownMenu, XPRM
+
+local function getXPRate()
+    local spellName = GetSpellInfo(87534)  --ID for EC Buff
+    if not spellName then return 1 end
+    
+    for i = 1, 40 do
+        local name = UnitBuff("player", i)
+        if not name then break end
+        if name == spellName then
+            return 0.5  --XP rate for EC is 50%
+        end
+    end
+
+    return 1 --Default XP rate
+end
 
 local function getQuestXP(completedOnly, zoneOnly)
 	local lastQuestLogID = GetQuestLogSelection()
 	local zoneText = GetZoneText()
 	local totalExp = 0
 	local locationName
+	local xpRate = getXPRate()
 
 	for questIndex = 1, GetNumQuestLogEntries() do
 		SelectQuestLogEntry(questIndex)
@@ -39,7 +57,7 @@ local function getQuestXP(completedOnly, zoneOnly)
 
 	SelectQuestLogEntry(lastQuestLogID)
 
-	return totalExp
+	return totalExp * xpRate
 end
 
 function mod:ExperienceBar_QuestXPUpdate(event)
