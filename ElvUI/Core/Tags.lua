@@ -603,7 +603,7 @@ E.TagInfo = {
 	--Colors
 	["namecolor"] = {category = "Colors", description = "Colors names by player class or NPC reaction"},
 	["powercolor"] = {category = "Colors", description = "Colors the power text based upon its type"},
-	["difficultycolor"] = {category = "Colors", description = "Colors the following tags by difficulty, red for impossible, orange for hard, green for easy"},
+	["difficultycolor"] = {category = "Colors", description = "Colors the following tags by difficulty, red for impossible, orange for hard, yellow for normal, green for easy"},
 	["healthcolor"] = {category = "Colors", description = "Changes color of health text, depending on the unit's current health"},
 	["threatcolor"] = {category = "Colors", description = "Changes color of health, depending on the unit's threat situation"},
 	["classificationcolor"] = {category = "Colors", description = "Changes color of health, depending on the unit's classification"},
