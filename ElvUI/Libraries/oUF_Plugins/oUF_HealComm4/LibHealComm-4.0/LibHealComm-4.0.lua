@@ -659,9 +659,7 @@ if( playerClass == "DRUID" ) then
 		-- Lifebloom
 		local Lifebloom = GetSpellInfo(33763)
 		hotData[Lifebloom] = {interval = 1, ticks = 7, coeff = 0.66626, dhCoeff = 0.34324 * 0.8, levels = {64, 72, 80}, averages = {224, 287, 371}, bomb = {480, 616, 776}}
-		-- Wild Growth
-		local WildGrowth = GetSpellInfo(48438)
-		hotData[WildGrowth] = {interval = 1, ticks = 7, coeff = 0.8056, levels = {60, 70, 75, 80}, averages = {686, 861, 1239, 1442}}
+		-- Wild Growth removed (WotLK spell)
 
 		-- Regrowth
 		spellData[Regrowth] = {coeff = 0.2867,
@@ -673,17 +671,13 @@ if( playerClass == "DRUID" ) then
 		spellData[HealingTouch] = {
 			levels = {1, 8, 14, 20, 26, 32, 38, 44, 50, 56, 60, 62, 69, 74, 79},
 			averages = {avg(37, 51), avg(88, 112), avg(195, 243), avg(363, 445), avg(490, 594), avg(636, 766), avg(802, 960), avg(1199, 1427), avg(1299, 1539), avg(1620, 1912), avg(1944, 2294), avg(2026, 2392), avg(2321, 2739), avg(3223, 3805), avg(3750, 4428)}}
-		-- Nourish
-		local Nourish = GetSpellInfo(50464)
-		spellData[Nourish] = {coeff = 0.358005, levels = {80}, averages = {avg(1883, 2187)}}
+		-- Nourish removed (WotLK spell)
 		-- Tranquility
 		local Tranquility = GetSpellInfo(740)
 		spellData[Tranquility] = {coeff = 1.144681, ticks = 4, levels = {30, 40, 50, 60, 70, 75, 80}, averages = {351, 515, 765, 1097, 1518, 2598, 3035}}
 
 		-- Talent data, these are filled in later and modified on talent changes
-		-- Master Shapeshifter (Multi)
-		local MasterShapeshifter = GetSpellInfo(48411)
-		talentData[MasterShapeshifter] = {mod = 0.02, current = 0}
+		-- Master Shapeshifter removed (WotLK talent)
 		-- Gift of Nature (Add)
 		local GiftofNature = GetSpellInfo(17104)
 		talentData[GiftofNature] = {mod = 0.02, current = 0}
@@ -693,15 +687,11 @@ if( playerClass == "DRUID" ) then
 		-- Empowered Rejuvenation (Multi, this ups both the direct heal and the hot)
 		local EmpoweredRejuv = GetSpellInfo(33886)
 		talentData[EmpoweredRejuv] = {mod = 0.04, current = 0}
-		-- Genesis (Add)
-		local Genesis = GetSpellInfo(57810)
-		talentData[Genesis] = {mod = 0.01, current = 0}
+		-- Genesis removed (WotLK talent)
 		-- Improved Rejuvenation (Add)
 		local ImprovedRejuv = GetSpellInfo(17111)
 		talentData[ImprovedRejuv] = {mod = 0.05, current = 0}
-		-- Nature's Splendor (+3s Rejuv/+6s Regrowth/+2s Lifebloom)
-		local NaturesSplendor = GetSpellInfo(57865)
-		talentData[NaturesSplendor] = {mod = 1, current = 0}
+		-- Nature's Splendor removed (WotLK talent)
 
 		local TreeofLife = GetSpellInfo(33891)
 		local Innervate = GetSpellInfo(29166)
@@ -723,7 +713,7 @@ if( playerClass == "DRUID" ) then
 			hotTotals[guid] = 0
 			if( unitHasAura(unit, Rejuvenation) ) then hotTotals[guid] = hotTotals[guid] + 1 end
 			if( unitHasAura(unit, Lifebloom) ) then hotTotals[guid] = hotTotals[guid] + 1 end
-			if( unitHasAura(unit, WildGrowth) ) then hotTotals[guid] = hotTotals[guid] + 1 end
+			-- WildGrowth removed (WotLK)
 			if( unitHasAura(unit, Regrowth) ) then
 				hasRegrowth[guid] = true
 				hotTotals[guid] = hotTotals[guid] + 1
@@ -762,11 +752,11 @@ if( playerClass == "DRUID" ) then
 			local healModifier, spModifier = playerHealModifier, 1
 			local bombAmount, totalTicks
 			healModifier = healModifier + talentData[GiftofNature].current
-			healModifier = healModifier + talentData[Genesis].current
+			-- Genesis removed (WotLK): healModifier = healModifier + talentData[Genesis].current
 
 			-- Master Shapeshifter does not apply directly when using Lifebloom
 			if( unitHasAura("player", TreeofLife) ) then
-				healModifier = healModifier * (1 + talentData[MasterShapeshifter].current)
+				-- MasterShapeshifter removed (WotLK): healModifier = healModifier * (1 + talentData[MasterShapeshifter].current)
 
 				-- 32387 - Idol of the Raven Godess, +44 SP while in TOL
 				if( playerCurrentRelic == 32387 ) then
@@ -807,7 +797,7 @@ if( playerClass == "DRUID" ) then
 				end
 
 				-- Nature's Splendor, +6 seconds
-				if( talentData[NaturesSplendor].mod >= 1 ) then totalTicks = totalTicks + 1 end
+				-- NaturesSplendor removed (WotLK)
 
 			-- Regrowth
 			elseif( spellName == Regrowth ) then
@@ -817,7 +807,7 @@ if( playerClass == "DRUID" ) then
 
 				totalTicks = 7
 				-- Nature's Splendor, +6 seconds
-				if( talentData[NaturesSplendor].mod >= 1 ) then totalTicks = totalTicks + 2 end
+				-- NaturesSplendor removed (WotLK)
 				-- T5 Resto, +6 seconds
 				if( equippedSetCache["T5 Resto"] >= 2 ) then totalTicks = totalTicks + 2 end
 
@@ -850,9 +840,9 @@ if( playerClass == "DRUID" ) then
 				-- Glyph of Lifebloom, +1 second
 				if( glyphCache[54826] ) then totalTicks = totalTicks + 1 end
 				-- Nature's Splendor, +2 seconds
-				if( talentData[NaturesSplendor].mod >= 1 ) then totalTicks = totalTicks + 1 end
-			-- Wild Growth
-			elseif( spellName == WildGrowth ) then
+				-- NaturesSplendor removed (WotLK)
+			-- Wild Growth removed (WotLK)
+			--[[elseif( spellName == WildGrowth ) then
 				spellPower = spellPower * (hotData[spellName].coeff * (1 + talentData[EmpoweredRejuv].current))
 				spellPower = spellPower / hotData[spellName].ticks
 				spellPower = calculateSpellPower(hotData[spellName].levels[rank], spellPower)
@@ -866,7 +856,7 @@ if( playerClass == "DRUID" ) then
 					tinsert(wgTicks, ceil(healModifier * ((healAmount + tickAmount * (3 - (i - 1) * tickModifier)) + (spellPower * spModifier))))
 				end
 
-				return HOT_HEALS, wgTicks, hotData[spellName].ticks, hotData[spellName].interval, nil, true
+				return HOT_HEALS, wgTicks, hotData[spellName].ticks, hotData[spellName].interval, nil, true--]]
 			end
 
 			healAmount = calculateGeneralAmount(hotData[spellName].levels[rank], healAmount, spellPower, spModifier, healModifier)
@@ -885,7 +875,7 @@ if( playerClass == "DRUID" ) then
 
 			-- Master Shapeshifter does not apply directly when using Lifebloom
 			if( unitHasAura("player", TreeofLife) ) then
-				healModifier = healModifier * (1 + talentData[MasterShapeshifter].current)
+				-- MasterShapeshifter removed (WotLK): healModifier = healModifier * (1 + talentData[MasterShapeshifter].current)
 
 				-- 32387 - Idol of the Raven Godess, +44 SP while in TOL
 				if( playerCurrentRelic == 32387 ) then
@@ -948,7 +938,7 @@ if( playerClass == "DRUID" ) then
 
 			-- Tranquility
 			elseif( spellName == Tranquility ) then
-				healModifier = healModifier + talentData[Genesis].current
+				-- Genesis removed (WotLK): healModifier = healModifier + talentData[Genesis].current
 
 				spellPower = spellPower * ((spellData[spellName].coeff * 1.88) * (1 + talentData[EmpoweredRejuv].current))
 				spellPower = spellPower / spellData[spellName].ticks
@@ -997,14 +987,9 @@ if( playerClass == "PALADIN" ) then
 		-- Healing Light (Add)
 		local HealingLight = GetSpellInfo(20237)
 		talentData[HealingLight] = {mod = 0.04, current = 0}
-		-- Divinity (Add)
-		local Divinity = GetSpellInfo(63646)
-		talentData[Divinity] = {mod = 0.01, current = 0}
-		-- Touched by the Light (Add?)
-		local TouchedbytheLight = GetSpellInfo(53592)
-		talentData[TouchedbytheLight] = {mod = 0.10, current = 0}
-		-- 100% of your heal on someone within range of your beacon heals the beacon target too
-		local BeaconofLight = GetSpellInfo(53563)
+		-- Divinity removed (WotLK talent)
+		-- Touched by the Light removed (WotLK talent)
+		-- Beacon of Light removed (WotLK spell)
 		-- 100% chance to crit
 		local DivineFavor = GetSpellInfo(20216)
 		-- Seal of Light + Glyph = 5% healing
@@ -1125,9 +1110,7 @@ if( playerClass == "PRIEST" ) then
 		-- Binding Heal
 		local BindingHeal = GetSpellInfo(32546)
 		spellData[BindingHeal] = {coeff = 1.5 / 3.5, levels = {64, 72, 78}, averages = {avg(1042, 1338), avg(1619, 2081), avg(1952, 2508)}, increase = {30, 24, 7}}
-		-- Penance
-		local Penance = GetSpellInfo(53007)
-		spellData[Penance] = {coeff = 0.857, ticks = 3, levels = {60, 70, 75, 80}, averages = {avg(670, 756), avg(805, 909), avg(1278, 1442), avg(1484, 1676)}}
+		-- Penance removed (WotLK spell)
 		-- Heal
 		local Heal = GetSpellInfo(2054)
 		spellData[Heal] = {coeff = 3 / 3.5, levels = {16, 22, 28, 34}, averages = {avg(295, 341), avg(429, 491), avg(566, 642), avg(712, 804)}, increase = {153, 185, 208, 207}}
@@ -1136,7 +1119,7 @@ if( playerClass == "PRIEST" ) then
 		spellData[LesserHeal] = {levels = {1, 4, 10}, averages = {avg(46, 56), avg(71, 85), avg(135, 157)}, increase = {71, 83, 112}}
 
 		-- Talent data
-		local Grace = GetSpellInfo(47517)
+		-- Grace removed (WotLK talent)
 		-- Spiritual Healing (Add)
 		local SpiritualHealing = GetSpellInfo(14898)
 		talentData[SpiritualHealing] = {mod = 0.02, current = 0}
@@ -1149,18 +1132,12 @@ if( playerClass == "PRIEST" ) then
 		-- Focused Power (Add)
 		local FocusedPower = GetSpellInfo(33190)
 		talentData[FocusedPower] = {mod = 0.02, current = 0}
-		-- Divine Providence (Add)
-		local DivineProvidence = GetSpellInfo(47567)
-		talentData[DivineProvidence] = {mod = 0.02, current = 0}
+		-- Divine Providence removed (WotLK talent)
 		-- Improved Renew (Add)
 		local ImprovedRenew = GetSpellInfo(14908)
 		talentData[ImprovedRenew] = {mod = 0.05, current = 0}
-		-- Empowered Renew (Multi, spell power)
-		local EmpoweredRenew = GetSpellInfo(63534)
-		talentData[EmpoweredRenew] = {mod = 0.05, current = 0}
-		-- Twin Disciplines (Add)
-		local TwinDisciplines = GetSpellInfo(47586)
-		talentData[TwinDisciplines] = {mod = 0.01, current = 0}
+		-- Empowered Renew removed (WotLK talent)
+		-- Twin Disciplines removed (WotLK talent)
 
 		-- Keep track of who has grace on them
 		local activeGraceGUID, activeGraceModifier
@@ -1301,12 +1278,8 @@ end
 if( playerClass == "SHAMAN" ) then
 	LoadClassData = function()
 		-- Hot data
-		-- Riptide
-		local Riptide = GetSpellInfo(61295)
-		hotData[Riptide] = {interval = 3, ticks = 5, coeff = 0.50, levels = {60, 70, 75, 80}, averages = {665, 885, 1435, 1670}}
-		-- Earthliving Weapon proc
-		local Earthliving = GetSpellInfo(52000)
-		hotData[Earthliving] = {interval = 3, ticks = 4, coeff = 0.80, levels = {30, 40, 50, 60, 70, 80}, averages = {116, 160, 220, 348, 456, 652}}
+		-- Riptide removed (WotLK spell)
+		-- Earthliving removed (WotLK spell)
 
 		-- Spell data
 		-- Chain Heal
@@ -1328,9 +1301,7 @@ if( playerClass == "SHAMAN" ) then
 		-- Improved Chain Heal (Multi)
 		local ImpChainHeal = GetSpellInfo(30872)
 		talentData[ImpChainHeal] = {mod = 0.10, current = 0}
-		-- Tidal Waves (Add, this is a buff)
-		local TidalWaves = GetSpellInfo(51566)
-		talentData[TidalWaves] = {mod = 0.04, current = 0}
+		-- Tidal Waves removed (WotLK talent)
 		-- Healing Way (Multi, this goes from 8 -> 16 -> 25 so have to manually do the conversion)
 		local HealingWay = GetSpellInfo(29206)
 		talentData[HealingWay] = {mod = 0, current = 0}
@@ -1455,7 +1426,7 @@ if( playerClass == "SHAMAN" ) then
 				end
 
 				local castTime = rank > 3 and 3 or rank == 3 and 2.5 or rank == 2 and 2 or 1.5
-				spellPower = spellPower * (((castTime / 3.5) * 1.88) + talentData[TidalWaves].current)
+				spellPower = spellPower * ((castTime / 3.5) * 1.88) -- TidalWaves removed
 
 			-- Lesser Healing Wave
 			elseif( spellName == LesserHealingWave ) then
@@ -1465,7 +1436,7 @@ if( playerClass == "SHAMAN" ) then
 				end
 
 				spellPower = spellPower + (playerCurrentRelic and lhwTotems[playerCurrentRelic] or 0)
-				spellPower = spellPower * ((spellData[spellName].coeff * 1.88) + talentData[TidalWaves].current * 0.02)
+				spellPower = spellPower * (spellData[spellName].coeff * 1.88) -- TidalWaves removed
 			end
 
 			healAmount = calculateGeneralAmount(spellData[spellName].levels[rank], healAmount, spellPower, spModifier, healModifier)
