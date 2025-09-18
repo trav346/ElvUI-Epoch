@@ -63,6 +63,23 @@ local function Update(self, event, unit)
 	local r, g, b
 	if(status and status > 0) then
 		r, g, b = GetThreatStatusColor(status)
+		
+		-- Invert colors for tanks in 3.3.5a where role system doesn't exist
+		-- For tanks: High threat (status 3) = good (green), Low threat = bad (red)
+		-- For DPS: High threat = bad (red), Low threat = good (green)
+		if _G.ElvUI then
+			local E = _G.ElvUI[1]
+			if E and E.Role == "Tank" then
+				-- Invert the colors for tanks
+				if status == 3 then -- tanking, should be green
+					r, g, b = 0, 1, 0
+				elseif status == 2 then -- high threat but not tanking, should be yellow
+					r, g, b = 1, 1, 0
+				elseif status == 1 then -- low threat, should be orange/red
+					r, g, b = 1, 0.5, 0
+				end
+			end
+		end
 
 		if(element.SetVertexColor) then
 			element:SetVertexColor(r, g, b)
