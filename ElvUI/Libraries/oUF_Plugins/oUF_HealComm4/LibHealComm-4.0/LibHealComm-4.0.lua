@@ -1051,7 +1051,7 @@ if( playerClass == "PALADIN" ) then
 			end
 
 			healModifier = healModifier + talentData[HealingLight].current
-			healModifier = healModifier * (1 + talentData[Divinity].current)
+			-- Divinity removed (WotLK): healModifier = healModifier * (1 + talentData[Divinity].current)
 
 			-- Apply extra spell power based on libram
 			if( playerCurrentRelic ) then
@@ -1077,7 +1077,7 @@ if( playerClass == "PALADIN" ) then
 			-- ... or the player has over a 100% chance to crit with Holy spells
 			if( hasDivineFavor or GetSpellCritChance(2) >= 100 ) then
 				hasDivineFavor = nil
-				healAmount = healAmount * (1.50 * (1 + talentData[TouchedbytheLight].current))
+				healAmount = healAmount * 1.50 -- TouchedbytheLight removed (WotLK)
 			end
 
 			return DIRECT_HEALS, ceil(healAmount)
@@ -1195,7 +1195,7 @@ if( playerClass == "PRIEST" ) then
 
 			if( spellName == Renew ) then
 				healModifier = healModifier + talentData[ImprovedRenew].current
-				healModifier = healModifier + talentData[TwinDisciplines].current
+				-- TwinDisciplines removed (WotLK): healModifier = healModifier + talentData[TwinDisciplines].current
 
 				-- Glyph of Renew, one less tick for +25% healing per tick. As this heals the same just faster, it has to be a flat 25% modifier
 				if( glyphCache[55674] ) then
@@ -1205,7 +1205,7 @@ if( playerClass == "PRIEST" ) then
 					totalTicks = 5
 				end
 
-				spellPower = spellPower * ((hotData[spellName].coeff * 1.88) * (1 + (talentData[EmpoweredRenew].current)))
+				spellPower = spellPower * (hotData[spellName].coeff * 1.88) -- EmpoweredRenew removed (WotLK)
 				spellPower = spellPower / hotData[spellName].ticks
 				healAmount = healAmount / hotData[spellName].ticks
 
@@ -1239,7 +1239,7 @@ if( playerClass == "PRIEST" ) then
 				spellPower = spellPower * ((spellData[spellName].coeff * 1.88) * (1 + talentData[EmpoweredHealing].spent * 0.04))
 			-- Binding Heal
 			elseif( spellName == BindingHeal ) then
-				healModifier = healModifier + talentData[DivineProvidence].current
+				-- DivineProvidence removed (WotLK): healModifier = healModifier + talentData[DivineProvidence].current
 				spellPower = spellPower * ((spellData[spellName].coeff * 1.88) * (1 + talentData[EmpoweredHealing].spent * 0.04))
 			-- Penance
 			elseif( spellName == Penance ) then
@@ -1247,7 +1247,7 @@ if( playerClass == "PRIEST" ) then
 				spellPower = spellPower / spellData[spellName].ticks
 			-- Prayer of Heaing
 			elseif( spellName == PrayerofHealing ) then
-				healModifier = healModifier + talentData[DivineProvidence].current
+				-- DivineProvidence removed (WotLK): healModifier = healModifier + talentData[DivineProvidence].current
 				spellPower = spellPower * (spellData[spellName].coeff * 1.88)
 			-- Heal
 			elseif( spellName == Heal ) then
@@ -1534,10 +1534,11 @@ if( select(2, UnitRace("player")) == "Draenei") or true then
 				healAmount = healAmount * (1 + talentData[FocusedPower].current)
 				healAmount = healAmount * (1 + talentData[BlessedResilience].current)
 			elseif playerClass == "PALADIN" then
-				if talentData[Divinity].current > 0 then
+				-- Divinity removed (WotLK)
+				--[[if talentData[Divinity].current > 0 then
 					healModifier = healModifier + talentData[Divinity].current
 					healAmount = healAmount * (1 + talentData[Divinity].current)
-				end
+				end--]]
 
 				if equippedSetCache["T10 Holy"] >= 2 and unitHasAura("player", DivineIllumination) then
 					healAmount = healAmount * 1.35
