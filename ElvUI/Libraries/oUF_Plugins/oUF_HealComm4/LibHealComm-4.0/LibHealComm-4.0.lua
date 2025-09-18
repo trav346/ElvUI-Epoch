@@ -1010,11 +1010,12 @@ if( playerClass == "PALADIN" ) then
 		-- Need the GUID of whoever has beacon on them so we can make sure they are visible to us and so we can check the mapping
 		local activeBeaconGUID, hasDivineFavor
 		AuraHandler = function(unit, guid)
-			if( unitHasAura(unit, BeaconofLight) ) then
+			-- Beacon of Light removed (WotLK)
+			--[[if( unitHasAura(unit, BeaconofLight) ) then
 				activeBeaconGUID = guid
 			elseif( activeBeaconGUID == guid ) then
 				activeBeaconGUID = nil
-			end
+			end--]]
 
 			-- Check Divine Favor
 			if( unit == "player" ) then
@@ -1139,16 +1140,17 @@ if( playerClass == "PRIEST" ) then
 		-- Empowered Renew removed (WotLK talent)
 		-- Twin Disciplines removed (WotLK talent)
 
-		-- Keep track of who has grace on them
+		-- Keep track of who has grace on them (Grace removed - WotLK)
 		local activeGraceGUID, activeGraceModifier
 		AuraHandler = function(unit, guid)
-			local stack, _, _, _, caster = select(4, UnitBuff(unit, Grace))
+			-- Grace removed (WotLK)
+			--[[local stack, _, _, _, caster = select(4, UnitBuff(unit, Grace))
 			if( caster == "player" ) then
 				activeGraceModifier = stack * 0.03
 				activeGraceGUID = guid
 			elseif( activeGraceGUID == guid ) then
 				activeGraceGUID = nil
-			end
+			end--]]
 		end
 
 		-- Check for beacon when figuring out who to heal
@@ -1319,10 +1321,10 @@ if( playerClass == "SHAMAN" ) then
 		local lhwTotems = {[42598] = 320, [42597] = 267, [42596] = 236, [42595] = 204, [25645] = 79, [22396] = 80, [23200] = 53}
 		local chTotems = {[45114] = 243, [38368] = 102, [28523] = 87}
 
-		-- Keep track of who has riptide on them
+		-- Keep track of who has earth shield on them (Riptide removed - WotLK)
 		local riptideData, earthshieldList = {}, {}
 		AuraHandler = function(unit, guid)
-			riptideData[guid] = unitHasAura(unit, Riptide) and true or nil
+			-- Riptide removed (WotLK): riptideData[guid] = unitHasAura(unit, Riptide) and true or nil
 
 			-- Currently, Glyph of Lesser Healing Wave + Any Earth Shield increase the healing not just the players own
 			if( UnitBuff(unit, EarthShield) ) then
@@ -1334,7 +1336,7 @@ if( playerClass == "SHAMAN" ) then
 
 		-- Cast was interrupted, recheck if we still have the auras up
 		ResetChargeData = function(guid)
-			riptideData[guid] = guidToUnit[guid] and unitHasAura(guidToUnit[guid], Riptide) and true or nil
+			-- Riptide removed (WotLK): riptideData[guid] = guidToUnit[guid] and unitHasAura(guidToUnit[guid], Riptide) and true or nil
 		end
 
 		-- Lets a specific override on how many people this will hit
