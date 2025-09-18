@@ -108,17 +108,53 @@ function E:GetTalentSpecInfo(isInspect)
 	return specIdx, specName, specIcon
 end
 
+-- Get assigned tank role for a specific unit
+function E:GetAssignedTankRole(unit)
+	if not self.db.general.tankAssignments then
+		self.db.general.tankAssignments = {}
+	end
+	
+	local name = UnitName(unit)
+	if name then
+		return self.db.general.tankAssignments[name]
+	end
+	return false
+end
+
+-- Set tank role for a specific unit
+function E:SetTankRole(unit, isTank)
+	if not self.db.general.tankAssignments then
+		self.db.general.tankAssignments = {}
+	end
+	
+	local name = UnitName(unit)
+	if name then
+		if isTank then
+			self.db.general.tankAssignments[name] = true
+		else
+			self.db.general.tankAssignments[name] = nil
+		end
+		
+		-- If setting for self, trigger role check
+		if UnitIsUnit(unit, "player") then
+			self:CheckRole()
+		end
+	end
+end
+
 function E:CheckRole(event)
 	local talentTree = self:GetTalentSpecInfo()
 	local role
-
-	if type(self.ClassRole[self.myclass]) == "string" then
+	
+	-- First check manual tank assignment (always takes priority)
+	if self:GetAssignedTankRole("player") then
+		role = "Tank"
+	-- Fall back to talent-based detection
+	elseif type(self.ClassRole[self.myclass]) == "string" then
 		role = self.ClassRole[self.myclass]
 	elseif talentTree then
 		if self.myclass == "DRUID" and talentTree == 2 then
 			role = select(5, GetTalentInfo(talentTree, 22)) > 0 and "Tank" or "Melee"
-		elseif self.myclass == "DEATHKNIGHT" and talentTree == 2 then
-			role = select(5, GetTalentInfo(talentTree, 25)) > 0 and "Tank" or "Melee"
 		else
 			role = self.ClassRole[self.myclass][talentTree]
 		end
@@ -418,6 +454,7 @@ function E:LoadAPI()
 	self:RegisterEvent("SPELL_UPDATE_USABLE", "CheckRole")
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "CheckRole")
 	self:RegisterEvent("PLAYER_TALENT_UPDATE", "CheckRole")
+	-- Removed stance/aura change events - tank detection only happens on login now
 --	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole")
 --	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole")
 --	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole")

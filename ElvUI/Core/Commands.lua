@@ -19,6 +19,22 @@ local GetNumAddOns = GetNumAddOns
 local GetCVarBool = GetCVarBool
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
 
+function E:ToggleTankRole()
+	-- Toggle between Tank and automatic detection
+	if not self.db.general then self.db.general = {} end
+	
+	if self.db.general.forceRole == "Tank" then
+		self.db.general.forceRole = nil
+		self:Print("Tank role override DISABLED. Using automatic detection.")
+	else
+		self.db.general.forceRole = "Tank"
+		self:Print("Tank role override ENABLED. You are now considered a tank for threat colors.")
+	end
+	
+	-- Trigger role check to update immediately
+	self:CheckRole()
+end
+
 function E:Grid(msg)
 	msg = msg and tonumber(msg)
 	if type(msg) == "number" and (msg <= 256 and msg >= 4) then
@@ -280,6 +296,7 @@ function E:LoadCommands()
 	self:RegisterChatCommand("farmmode", "FarmMode")
 	self:RegisterChatCommand("cleanguild", "MassGuildKick")
 	self:RegisterChatCommand("estatus", "ShowStatusReport")
+	self:RegisterChatCommand("tankmode", "ToggleTankRole") -- Toggle tank role for threat colors
 	-- self:RegisterChatCommand("aprilfools", "") --Don't need this until next april fools
 
 	if E.private.actionbar.enable then
