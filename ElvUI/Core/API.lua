@@ -146,8 +146,11 @@ function E:CheckRole(event)
 	local talentTree = self:GetTalentSpecInfo()
 	local role
 	
-	-- First check manual tank assignment (always takes priority)
-	if self:GetAssignedTankRole("player") then
+	-- First check forceRole from /tankmode command
+	if self.db.general and self.db.general.forceRole then
+		role = self.db.general.forceRole
+	-- Then check manual tank assignment from right-click menu
+	elseif self:GetAssignedTankRole("player") then
 		role = "Tank"
 	-- Fall back to talent-based detection
 	elseif type(self.ClassRole[self.myclass]) == "string" then
