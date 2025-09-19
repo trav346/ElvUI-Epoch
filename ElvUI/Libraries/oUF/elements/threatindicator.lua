@@ -64,19 +64,34 @@ local function Update(self, event, unit)
 	if(status and status > 0) then
 		r, g, b = GetThreatStatusColor(status)
 		
-		-- Invert colors for tanks in 3.3.5a where role system doesn't exist
+		-- Invert colors ONLY for tank units, not for all units when viewed by a tank
 		-- For tanks: High threat (status 3) = good (green), Low threat = bad (red)
 		-- For DPS: High threat = bad (red), Low threat = good (green)
 		if _G.ElvUI then
 			local E = _G.ElvUI[1]
-			if E and E.Role == "Tank" then
-				-- Invert the colors for tanks
-				if status == 3 then -- tanking, should be green
-					r, g, b = 0, 1, 0
-				elseif status == 2 then -- high threat but not tanking, should be yellow
-					r, g, b = 1, 1, 0
-				elseif status == 1 then -- low threat, should be orange/red
-					r, g, b = 1, 0.5, 0
+			if E then
+				-- Check if THIS UNIT is a tank, not if the viewer is a tank
+				local unitName = UnitName(unit)
+				local unitIsTank = false
+				
+				-- Check if it's the player and they're in tank mode
+				if UnitIsUnit(unit, "player") then
+					unitIsTank = (E.db and E.db.general and E.db.general.forceRole == "Tank") or 
+					             (E.db and E.db.general and E.db.general.tankAssignments and E.db.general.tankAssignments[E.myname])
+				-- Check if this unit is in our tank assignments
+				elseif unitName and E.db and E.db.general and E.db.general.tankAssignments then
+					unitIsTank = E.db.general.tankAssignments[unitName] == true
+				end
+				
+				if unitIsTank then
+					-- Invert the colors for THIS tank unit
+					if status == 3 then -- tanking, should be green
+						r, g, b = 0, 1, 0
+					elseif status == 2 then -- high threat but not tanking, should be yellow
+						r, g, b = 1, 1, 0
+					elseif status == 1 then -- low threat, should be orange/red
+						r, g, b = 1, 0.5, 0
+					end
 				end
 			end
 		end
