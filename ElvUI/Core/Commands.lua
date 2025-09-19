@@ -35,27 +35,6 @@ function E:ToggleTankRole()
 	self:CheckRole()
 end
 
-function E:ListTanks()
-	if not self.db.general.tankAssignments or next(self.db.general.tankAssignments) == nil then
-		self:Print("No tanks assigned.")
-	else
-		self:Print("Assigned tanks:")
-		for name, _ in pairs(self.db.general.tankAssignments) do
-			self:Print("  - " .. name)
-		end
-	end
-end
-
-function E:ClearTanks()
-	if self.db.general.tankAssignments then
-		wipe(self.db.general.tankAssignments)
-		self:Print("Cleared all tank assignments.")
-		self:CheckRole()
-	else
-		self:Print("No tank assignments to clear.")
-	end
-end
-
 function E:Grid(msg)
 	msg = msg and tonumber(msg)
 	if type(msg) == "number" and (msg <= 256 and msg >= 4) then
@@ -318,8 +297,6 @@ function E:LoadCommands()
 	self:RegisterChatCommand("cleanguild", "MassGuildKick")
 	self:RegisterChatCommand("estatus", "ShowStatusReport")
 	self:RegisterChatCommand("tankmode", "ToggleTankRole") -- Toggle tank role for threat colors
-	self:RegisterChatCommand("tanklist", "ListTanks") -- List all assigned tanks
-	self:RegisterChatCommand("tankclear", "ClearTanks") -- Clear all tank assignments
 	-- self:RegisterChatCommand("aprilfools", "") --Don't need this until next april fools
 
 	if E.private.actionbar.enable then

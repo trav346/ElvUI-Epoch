@@ -433,6 +433,11 @@ function E:PLAYER_ENTERING_WORLD()
 		self:UpdateMedia()
 		self.MediaUpdated = true
 	end
+	
+	-- Clear tank assignments from previous sessions
+	if self.db.general and self.db.general.tankAssignments then
+		wipe(self.db.general.tankAssignments)
+	end
 
 	local _, instanceType = IsInInstance()
 	if instanceType == "pvp" then
