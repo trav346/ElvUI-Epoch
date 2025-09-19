@@ -28,10 +28,10 @@ function E:ToggleTankRole()
 	
 	if self.db.general.forceRole == "Tank" then
 		self.db.general.forceRole = nil
-		self:Print("Tank role override DISABLED. Using automatic detection.")
+		self:Print("Tank role DISABLED.")
 	else
 		self.db.general.forceRole = "Tank"
-		self:Print("Tank role override ENABLED. You are now considered a tank for threat colors.")
+		self:Print("Tank role ENABLED.")
 	end
 	
 	-- Trigger role check to update immediately
