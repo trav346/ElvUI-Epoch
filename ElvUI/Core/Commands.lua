@@ -21,7 +21,10 @@ local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
 
 function E:ToggleTankRole()
 	-- Toggle between Tank and automatic detection
-	if not self.db.general then self.db.general = {} end
+	if not self.db.general then 
+		self:Print("Error: Database not initialized. Please reload UI.")
+		return
+	end
 	
 	if self.db.general.forceRole == "Tank" then
 		self.db.general.forceRole = nil

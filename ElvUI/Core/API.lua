@@ -110,6 +110,10 @@ end
 
 -- Get assigned tank role for a specific unit
 function E:GetAssignedTankRole(unit)
+	if not self.db or not self.db.general then
+		return false
+	end
+	
 	if not self.db.general.tankAssignments then
 		self.db.general.tankAssignments = {}
 	end
@@ -123,6 +127,10 @@ end
 
 -- Set tank role for a specific unit
 function E:SetTankRole(unit, isTank)
+	if not self.db or not self.db.general then
+		return
+	end
+	
 	if not self.db.general.tankAssignments then
 		self.db.general.tankAssignments = {}
 	end
@@ -146,8 +154,8 @@ function E:CheckRole(event)
 	local talentTree = self:GetTalentSpecInfo()
 	local role
 	
-	-- First check forceRole from /tankmode command
-	if self.db.general and self.db.general.forceRole then
+	-- First check forceRole from /tankmode command (if db is initialized)
+	if self.db and self.db.general and self.db.general.forceRole then
 		role = self.db.general.forceRole
 	-- Then check manual tank assignment from right-click menu
 	elseif self:GetAssignedTankRole("player") then
