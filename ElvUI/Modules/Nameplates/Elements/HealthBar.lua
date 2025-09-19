@@ -36,14 +36,16 @@ function NP:Update_HealthColor(frame)
 		
 		-- Check if another tank has this mob (for off-tank coloring)
 		local otherTankHasAggro = false
-		if isTank and status and status < 3 then -- We're a tank but don't have aggro (might have some threat from cleave)
-			-- Simple check: if we're targeting this nameplate and its target is a friendly unit
-			-- Check if that friendly unit is another assigned tank
+		if isTank and status and status < 3 then -- We're a tank but don't have aggro
+			-- Check if the mob's target is another assigned tank (not ourselves)
 			if frame.unit and UnitExists(frame.unit.."target") then
 				local targetName = UnitName(frame.unit.."target")
-				if targetName and E.db.general.tankAssignments and E.db.general.tankAssignments[targetName] then
-					-- The mob is targeting another assigned tank
-					otherTankHasAggro = true
+				-- Only color purple if target is another tank (not self) and is a player
+				if targetName and targetName ~= E.myname and UnitIsPlayer(frame.unit.."target") then
+					if E.db.general.tankAssignments and E.db.general.tankAssignments[targetName] then
+						-- The mob is targeting another assigned tank
+						otherTankHasAggro = true
+					end
 				end
 			end
 		end
