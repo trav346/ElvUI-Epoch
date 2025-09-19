@@ -35,10 +35,13 @@ function NP:Update_HealthColor(frame)
 		local isTank = E.Role == "Tank" or (E.GetAssignedTankRole and E:GetAssignedTankRole("player"))
 		
 		-- Check if another tank has this mob (for off-tank coloring)
-		-- Only relevant when in a group
+		-- Only relevant when in a group and mob is alive
 		local otherTankHasAggro = false
 		local inGroup = GetNumPartyMembers() > 0 or GetNumRaidMembers() > 0
-		if inGroup and isTank and status and status < 3 then -- We're a tank but don't have aggro
+		local mobHealth = frame.oldHealthBar and frame.oldHealthBar:GetValue() or 0
+		local mobIsAlive = mobHealth > 0 and (not UnitIsDead(frame.unit or ""))
+		
+		if inGroup and mobIsAlive and isTank and status and status < 3 then -- We're a tank but don't have aggro
 			-- Check if the mob's target is another assigned tank (not ourselves)
 			if frame.unit and UnitExists(frame.unit.."target") then
 				local targetName = UnitName(frame.unit.."target")
